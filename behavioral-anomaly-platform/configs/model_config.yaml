@@ -1,0 +1,41 @@
+# Model + detection pipeline configuration
+
+paths:
+  features: data/processed/features.parquet
+  model_dir: artifacts/models
+  report_dir: reports
+
+profiling:
+  method: rolling_stats        # rolling_stats | autoencoder
+  window_days: 14
+
+detection:
+  primary_model: transformer   # isolation_forest | one_class_svm | autoencoder | lstm | gru | transformer
+  sequence_length: 20
+  hidden_dim: 64
+  num_layers: 2
+  learning_rate: 0.001
+  epochs: 30
+  batch_size: 128
+  alert_budget_pct: 1.0        # top 1% riskiest events surfaced to analysts
+
+classification:
+  model: xgboost               # xgboost | lightgbm | random_forest | catboost
+  max_depth: 6
+  n_estimators: 300
+  learning_rate: 0.05
+
+explainability:
+  top_k_features: 5
+  method: shap                 # shap | lime
+
+risk_scoring:
+  weights:
+    anomaly_severity: 0.4
+    classifier_confidence: 0.3
+    resource_sensitivity: 0.2
+    entity_trust_history: 0.1
+
+evaluation:
+  metrics: [precision, recall, f1, roc_auc, pr_auc, false_positive_rate, detection_delay_sec]
+  cross_validation_folds: 5

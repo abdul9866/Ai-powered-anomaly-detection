@@ -1,0 +1,95 @@
+# Synthetic data generation config
+
+num_events: 100000
+anomaly_rate: 0.02          # fraction of sessions that are attacks (realistic imbalance)
+random_seed: 42
+
+entities:
+  employees: 400
+  admins: 25
+  service_accounts: 60
+  cloud_servers: 30
+  iot_devices: 80
+  vpn_gateways: 5
+  routers: 10
+  database_servers: 15
+
+fields:
+  - entity_id
+  - entity_type
+  - timestamp
+  - device_id
+  - os
+  - browser
+  - country
+  - city
+  - source_ip
+  - mac_address
+  - device_fingerprint
+  - resource_accessed
+  - api_endpoint
+  - auth_method
+  - command_sequence
+  - session_duration_sec
+  - failed_attempts
+  - risk_score        # ground truth signal for eval, not fed to model at inference
+  - privilege_level
+  - network_protocol
+  - bytes_uploaded
+  - bytes_downloaded
+  - geo_lat
+  - geo_lon
+  - label              # normal / <attack_type>, held out at inference
+
+attack_taxonomy:
+  brute_force:
+    severity: medium
+    mitre_attack: T1110
+  credential_stuffing:
+    severity: high
+    mitre_attack: T1110.004
+  impossible_travel:
+    severity: high
+    mitre_attack: T1078
+  lateral_movement:
+    severity: critical
+    mitre_attack: T1021
+  privilege_escalation:
+    severity: critical
+    mitre_attack: T1068
+  insider_threat:
+    severity: high
+    mitre_attack: T1078.002
+  data_exfiltration:
+    severity: critical
+    mitre_attack: T1041
+  device_spoofing:
+    severity: medium
+    mitre_attack: T1036
+  ransomware_behaviour:
+    severity: critical
+    mitre_attack: T1486
+  malware_beaconing:
+    severity: high
+    mitre_attack: T1071
+  dns_tunneling:
+    severity: high
+    mitre_attack: T1071.004
+  suspicious_powershell:
+    severity: high
+    mitre_attack: T1059.001
+  command_injection:
+    severity: critical
+    mitre_attack: T1059
+  remote_login_abuse:
+    severity: medium
+    mitre_attack: T1133
+  session_hijacking:
+    severity: high
+    mitre_attack: T1563
+  supply_chain_compromise:
+    severity: critical
+    mitre_attack: T1195
+  unknown_zero_day:
+    severity: critical
+    mitre_attack: unmapped
